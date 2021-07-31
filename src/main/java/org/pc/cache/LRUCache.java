@@ -1,4 +1,4 @@
-package org.pc.start.cache;
+package org.pc.cache;
 
 
 public class LRUCache<K,V> {

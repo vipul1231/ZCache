@@ -1,4 +1,4 @@
-package org.pc.start;
+package org.pc;
 
 public class StartCacheServer {
 
