@@ -3,20 +3,20 @@ package org.pc.cmap;
 /**
  * Custom map implementation
  */
-public class CustomHashMap<K, V> {
+public class CustomHashMap<K, V> implements ICustomMap<K,V>{
 
     /**
-     *
+     *  Entries array.
      */
-    private Entry<K, V>[] entries;
+    private Entry<Object, Object>[] entries;
 
     /**
-     *
+     *  Initial capacities.
      */
     private final int initialCapacities;
 
     /**
-     *
+     * Custom hash map
      */
     public CustomHashMap() {
         initialCapacities = 16;
@@ -24,7 +24,7 @@ public class CustomHashMap<K, V> {
     }
 
     /**
-     *  Custom
+     *  Custom hash map
      *
      * @param capacities
      */
@@ -39,14 +39,14 @@ public class CustomHashMap<K, V> {
      * @param key   key
      * @param value value
      */
-    public void put(K key, V value) {
+    public void put(Object key, Object value) {
         int index  = index(key);
-        Entry<K,V> entry = new Entry<>(key, value, null);
+        Entry<Object,Object> entry = new Entry<>(key, value, null);
         if (entries[index] == null) {
             entries[index] = entry;
         }
         else {
-            Entry<K, V> entry1 = entries[index];
+            Entry<Object, Object> entry1 = entries[index];
             while (entry1 != null) {
                 if (entry1.getKey().equals(key)) {
                     entry1.setValue(value);
@@ -66,10 +66,10 @@ public class CustomHashMap<K, V> {
      *
      * @param key   key
      */
-    public V get(K key) {
+    public Object get(Object key) {
         int index = index(key);
         if(entries[index] != null) {
-            Entry<K, V> entry = entries[index];
+            Entry<Object, Object> entry = entries[index];
             while (entry != null) {
                 if (entry.getKey().equals(key)) {
                     return entry.getValue();
@@ -86,7 +86,7 @@ public class CustomHashMap<K, V> {
      * @param key   Key
      * @return  index of array entry.
      */
-    public int index(K key) {
+    public int index(Object key) {
         int hash = hash(key);
         return hash & (initialCapacities-1);
     }
@@ -96,8 +96,35 @@ public class CustomHashMap<K, V> {
      * @param key
      * @return
      */
-    public int hash(K key){
+    public int hash(Object key){
         int h;
         return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+    }
+
+    @Override
+    public boolean remove(Object key) {
+        int index = index(key);
+        Entry<Object, Object> entry = entries[index];
+
+        if (entry != null) {
+            Entry<Object, Object> previous = null;
+            while (entry != null) {
+                if (entry.getKey().equals(key)) {
+
+                    if (previous != null) {
+                        previous.setNext(entry.getNext());
+
+                        return true;
+                    } else {
+                        entries[index] = null;
+                        return true;
+                    }
+                }
+                previous = entry;
+                entry = entry.getNext();
+            }
+        }
+
+        return false;
     }
 }

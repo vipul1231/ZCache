@@ -39,7 +39,19 @@ public class CustomHashMapTest {
     @Test
     public void givenCustomHashMapAndPerformPutAndGetOperation() {
         customHashMap.put("1234","Hello123");
-        String result = customHashMap.get("1234");
+        String result = (String) customHashMap.get("1234");
         Assert.assertEquals("Hello123", result);
+    }
+
+    @Test
+    public void givenCustomHashMapAndPerformDeleteOperation() {
+        customHashMap.put("123","Get1234");
+        String result = (String) customHashMap.get("123");
+        Assert.assertEquals("Get1234", result);
+
+        boolean response = customHashMap.remove("123");
+        Assert.assertTrue(response);
+        result = (String) customHashMap.get("1234");
+        Assert.assertNull(result);
     }
 }
